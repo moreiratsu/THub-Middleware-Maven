@@ -1,0 +1,15 @@
+
+# ARCHIVOS COMPILADOS Y GENERADO POR MAVEN
+/target/
+
+# ARCHIVOS GENERADOS POR ECLIPSE/NTEBEANS ETC(LOS IDE)
+/.idea/
+*.iml
+/.settings/
+/.classpath
+/.project
+/bin/
+
+# ARCHIVOS DEL SISTEMA OPERATIVO
+.DS_Store
+Thumbs.db
