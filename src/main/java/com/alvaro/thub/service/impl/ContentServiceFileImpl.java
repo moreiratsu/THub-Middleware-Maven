@@ -39,7 +39,7 @@ public class ContentServiceFileImpl implements ContentService {
 		buffer.append(CMS_BASE_FOLDER)
 		.append("/").append(metadata.getEntityType())
 		.append("/").append(metadata.getEntityId())
-		.append("/").append(metadata.getResourceId())
+		.append("/").append(metadata.getResourceType())
 		.append(metadata.getFormat());		
 		return buffer.toString();
 	}
@@ -78,6 +78,9 @@ public class ContentServiceFileImpl implements ContentService {
 		String contentPath = getPath(metadata);
 		try {
 			FileUtils.saveFile(data.getRaw(), contentPath);
+			if (logger.isInfoEnabled()) {
+				logger.info("Guardado "+contentPath);
+			}
 		} catch (IOException ioe) {
 			logger.error("Guardando "+contentPath+": "+ioe.getMessage(), ioe);			
 			throw new ContentException(contentPath, ioe);

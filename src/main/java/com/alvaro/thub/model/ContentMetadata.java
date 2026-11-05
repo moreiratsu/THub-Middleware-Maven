@@ -7,11 +7,11 @@ public class ContentMetadata {
 	 *  incluyendo información adicional sobre el contenido,
 	 *   como su tipo de entidad, identificador de entidad,
 	 *    identificador de recurso y formato.
-	 */
+	 */	
 
 	private String entityType = null;    
 	private String entityId = null; 
-	private String resourceId = null; 
+	private String resourceType = null; 
 	private String format = null; 
 
 	public ContentMetadata() {		
@@ -34,12 +34,14 @@ public class ContentMetadata {
 	}
 
 
-	public String getResourceId() {
-		return resourceId;
+
+
+	public String getResourceType() {
+		return resourceType;
 	}
 
-	public void setResourceId(String resourceId) {
-		this.resourceId = resourceId;
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 
 	public String getFormat() {

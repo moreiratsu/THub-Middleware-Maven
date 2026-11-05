@@ -5,10 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.alvaro.thub.model.ContentData;
-import com.alvaro.thub.model.ContentMetadata;
-import com.alvaro.thub.service.ContentService;
-
 public class FileUtils {
 
 	/**
@@ -60,50 +56,5 @@ public class FileUtils {
 			return fis.readAllBytes();
 		}
 	}
-
-	
-	
-	/*
-	 * Guarda un recurso limpiando previamente cualquier versión antigua
-	 * 
-	 * @param el contentService para guardar el recurso y eliminar los antiguos y los metadatos para identificar el recurso
-	 * @return void
-	 * @throws IOException si ocurre un error al guardar el recurso
-	 */
-	public static void saveOrUpdateResource(ContentService contentService, String entityType, String entityId, String resourceId, byte[] rawData, String extension) throws IOException {
-        if (rawData == null || rawData.length == 0 || entityId == null) {
-            return;
-        }
-
-        // 1. Limpieza de formatos antiguos
-        String[] formatos = {".png", ".jpg", ".jpeg"}; // Lista de formatos antiguos a eliminar
-        for (String fmt : formatos) {
-            ContentMetadata oldMeta = new ContentMetadata();
-            oldMeta.setEntityType(entityType);
-            oldMeta.setEntityId(entityId);
-            oldMeta.setResourceId(resourceId);
-            oldMeta.setFormat(fmt);
-            try {
-                contentService.remove(oldMeta);
-            } catch (Exception e) {
-            	throw new IOException("Error al eliminar el recurso antiguo con formato " + fmt + ": " + e.getMessage(), e);
-            }
-        }
-
-        // 2. Guardar el nuevo recurso
-        ContentMetadata metadata = new ContentMetadata();
-        metadata.setEntityType(entityType);
-        metadata.setEntityId(entityId);
-        metadata.setResourceId(resourceId);
-        metadata.setFormat(extension != null ? extension : ".png");
-
-        ContentData contentData = new ContentData();
-        contentData.setMetadata(metadata);
-        contentData.setRaw(rawData);
-
-        contentService.save(contentData);
-    }
-	
-	
 	
 	}

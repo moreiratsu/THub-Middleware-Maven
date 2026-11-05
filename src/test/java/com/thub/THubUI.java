@@ -16,7 +16,7 @@ public class THubUI {
 			ContentMetadata metadata = new ContentMetadata();
 			metadata.setEntityType("competicion");
 			metadata.setEntityId("762");
-			metadata.setResourceId("small-image");
+			metadata.setResourceType("small-image");
 			metadata.setFormat("webp");
 			
 			byte[] cartel = FileUtils.readFile("c:/t/cartel_futbolin.webp");
