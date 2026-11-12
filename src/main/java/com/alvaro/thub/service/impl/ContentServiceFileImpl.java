@@ -1,6 +1,11 @@
 package com.alvaro.thub.service.impl;
 
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 //import java.nio.file.Files;
 //import java.nio.file.Path;
 import java.util.List;
@@ -65,9 +70,76 @@ public class ContentServiceFileImpl implements ContentService {
 	}
 
 	@Override
-	public List<ContentData> get(String entityType, String entityId) throws ContentException {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ContentData> get(String entityType, String entityId)
+	        throws ContentException {
+
+	    List<ContentData> contenidos = new ArrayList<>();
+
+	    if (entityType == null || entityType.isBlank()
+	            || entityId == null || entityId.isBlank()) {
+	        return contenidos;
+	    }
+
+	    Path carpetaCms = Paths.get(CMS_BASE_FOLDER)
+	            .toAbsolutePath()
+	            .normalize();
+
+	    Path carpetaEntidad = carpetaCms
+	            .resolve(entityType)
+	            .resolve(entityId)
+	            .normalize();
+
+	    // Evita que los valores recibidos apunten fuera de la carpeta del CMS.
+	    if (!carpetaEntidad.startsWith(carpetaCms)) {
+	        throw new ContentException("La ruta del contenido no es válida.");
+	    }
+
+	    // Si el evento aún no tiene archivos, devolvemos una lista vacía.
+	    if (!Files.isDirectory(carpetaEntidad)) {
+	        return contenidos;
+	    }
+
+	    try (DirectoryStream<Path> archivos =
+	            Files.newDirectoryStream(carpetaEntidad)) {
+
+	        for (Path archivo : archivos) {
+	            if (!Files.isRegularFile(archivo)) {
+	                continue;
+	            }
+
+	            String nombreArchivo = archivo.getFileName().toString();
+	            int posicionPunto = nombreArchivo.lastIndexOf('.');
+
+	            // El nombre del archivo guarda el tipo de recurso y su formato:
+	            // cartel.jpg -> recurso "cartel", formato ".jpg"
+	            if (posicionPunto <= 0) {
+	                continue;
+	            }
+
+	            String tipoRecurso = nombreArchivo.substring(0, posicionPunto);
+	            String formato = nombreArchivo.substring(posicionPunto);
+
+	            ContentMetadata metadata = new ContentMetadata();
+	            metadata.setEntityType(entityType);
+	            metadata.setEntityId(entityId);
+	            metadata.setResourceType(tipoRecurso);
+	            metadata.setFormat(formato);
+
+	            ContentData contenido = new ContentData();
+	            contenido.setMetadata(metadata);
+	            contenido.setRaw(Files.readAllBytes(archivo));
+
+	            contenidos.add(contenido);
+	        }
+
+	        return contenidos;
+
+	    } catch (IOException e) {
+	        throw new ContentException(
+	                "No se pudieron leer los contenidos de la entidad.",
+	                e
+	        );
+	    }
 	}
 
 	@Override

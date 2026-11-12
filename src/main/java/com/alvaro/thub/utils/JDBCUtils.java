@@ -18,7 +18,7 @@ public class JDBCUtils {
 		try {
 			// Carga el driver JDBC
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			return DriverManager.getConnection("jdbc:mysql://94.130.104.92:3306/thub", "alvaro2026", "abc123.");
+			return DriverManager.getConnection("jdbc:mysql://localhost:3306/thub", "root", "moremore4");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
