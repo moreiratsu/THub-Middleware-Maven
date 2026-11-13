@@ -279,8 +279,8 @@ public class EventDAO {
 			ps = c.prepareStatement(sql);
 
 			int i = 1;
-			ps.setLong(i++, eventId);
 			ps.setLong(i++, statusId);
+			ps.setLong(i++, eventId);
 
 			return ps.executeUpdate()>0;			
 
