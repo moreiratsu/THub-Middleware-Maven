@@ -69,6 +69,7 @@ public class ContentServiceFileImpl implements ContentService {
         }
 	}
 
+	// con este metodo recupero todos los archivos de una entidad por su id y tipo de entidad por ejemplo todos los archivos de evento con id 1
 	@Override
 	public List<ContentData> get(String entityType, String entityId)
 	        throws ContentException {
@@ -159,10 +160,21 @@ public class ContentServiceFileImpl implements ContentService {
 		}
 	}
 
+	// borra los archivos de la ruta de los metadatos
 	@Override
 	public void remove(ContentMetadata metadata) throws DataException {
-		// TODO Auto-generated method stub
-		
+	    if (metadata == null) {
+	        return;
+	    }
+
+	    String ruta = getPath(metadata); // construye la ruta completa usando el tipo de entidad, su ID, el tipo de recurso y el formato. Por ejemplo: .../event/11/cartel.png.
+
+	    try {
+	        Files.deleteIfExists(Paths.get(ruta));
+	    } catch (IOException e) {
+	        logger.error("No se pudo eliminar el contenido " + ruta, e);
+	        throw new DataException("No se pudo eliminar el contenido.", e);
+	    }
 	}
 
 	@Override
