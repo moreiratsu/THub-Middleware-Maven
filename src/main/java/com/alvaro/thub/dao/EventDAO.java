@@ -150,13 +150,13 @@ public class EventDAO {
 
 			List<EventDTO> paginaDeResultados = new ArrayList<EventDTO>(); // lista para almacenar los eventos encontrados
 
-			if(from >= 1) {
-				int count = 0;
-				rs.absolute(from); 
-				do {
-					paginaDeResultados.add(loadNext(rs));
-					++count;
-				}while (count<pageSize && rs.next());
+			if (from >= 1 && rs.absolute(from)) {
+			    int count = 0;
+
+			    do {
+			        paginaDeResultados.add(loadNext(rs));
+			        count++;
+			    } while (count < pageSize && rs.next());
 			}
 
 			int totalResults = SQLUtils.getTotalRows(rs);
